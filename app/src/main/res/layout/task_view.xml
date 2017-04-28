@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:layout_margin="5dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="26sp"
+        tools:text="Task title"
+        android:paddingBottom="10dp"
+        android:id="@+id/tv_listTaskTitle"/>
+
+    <TextView
+        android:id="@+id/tv_listDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="This is too long text so it should be cut in some place and show three dots"/>
+
+</LinearLayout>
