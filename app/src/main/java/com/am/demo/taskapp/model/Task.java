@@ -17,7 +17,7 @@ public class Task implements Parcelable {
     private ArrayList<String> taskList;
 
     public Task() {
-        id = counter++;
+        id = 0;
         title = "";
         description = "";
         taskList = new ArrayList<>();
@@ -56,6 +56,10 @@ public class Task implements Parcelable {
 
     public ArrayList<String> getTaskList() {
         return taskList;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setTitle(String title) {

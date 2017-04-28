@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.am.demo.taskapp.adapter.TasksRecyclerViewAdapter;
+import com.am.demo.taskapp.database.TaskDAO;
 import com.am.demo.taskapp.model.Task;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -38,6 +39,7 @@ public class TasksListFragment extends Fragment {
     private InformationFragment informationFragment;
     private SharedPreferences sharedPrefences;
     private Task task;
+    private TaskDAO taskDAO;
 
 
     @Override
@@ -51,6 +53,8 @@ public class TasksListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        taskDAO = TaskDAO.getInstance(getContext());
+
         if (getArguments() != null) {
             tasks = getArguments().getParcelableArrayList("TASKS");
         }
@@ -58,10 +62,6 @@ public class TasksListFragment extends Fragment {
             tasks = new ArrayList<>();
         }
 
-//        tasks = new ArrayList<>();
-  //      if (task != null) {
-    //        tasks.add(task);
-      //  }
         findViews();
         setRecyclerView();
         setListeners();
@@ -78,7 +78,7 @@ public class TasksListFragment extends Fragment {
         adapter = new TasksRecyclerViewAdapter();
         tasksRecyclerView.setAdapter(adapter);
         adapter.setOnTaskClickListener(this::showTaskDetails);
-        adapter.setTasks(tasks);
+        adapter.setTasks(taskDAO.getAllNotes());
     }
 
 

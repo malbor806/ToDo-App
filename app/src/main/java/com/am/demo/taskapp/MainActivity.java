@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.am.demo.taskapp.database.TaskDAO;
 import com.am.demo.taskapp.database.ToDoDbAdapter;
 import com.am.demo.taskapp.model.Task;
 
@@ -17,12 +18,13 @@ public class MainActivity extends AppCompatActivity {
     private TasksListFragment tasksListFragment;
     private static SharedPreferences sharedPreferences;
     private Task task;
-    public static ToDoDbAdapter database;
+    private TaskDAO taskDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         if (findViewById(R.id.container_rootFragment) != null) {
             if (savedInstanceState != null) {
