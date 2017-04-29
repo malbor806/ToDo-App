@@ -18,12 +18,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:padding="10dp"
-        android:weightSum="11"
        >
 
         <EditText
@@ -37,41 +39,32 @@
             android:id="@+id/et_setDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="4"
             android:hint="@string/set_description" />
 
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="9"
-            >
+            android:id="@+id/ll_minitaskList"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:id="@+id/ll_minitaskList"
-                android:orientation="vertical"/>
-
-        </ScrollView>
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:id="@+id/b_addNewMiniTask"
-            android:text="ADD"
-            android:layout_weight="1"
+            android:text="ADD" />
 
-            />
         <Button
             android:id="@+id/b_saveChanges"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="@string/save"
-            android:layout_weight="1"/>
-
+            android:text="@string/save" />
 
     </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class InformationFragment extends Fragment {
     }
 
     private void findViews() {
+
         titleTextView = (TextView) getView().findViewById(R.id.tv_taskTitle);
         descriptionTextView = (TextView) getView().findViewById(R.id.tv_taskDescription);
         editTaskButton = (Button) getView().findViewById(R.id.b_editButton);
