@@ -5,4 +5,5 @@
     <dimen name="ll_description_padding">5dp</dimen>
     <dimen name="title_margin_bottom">10dp</dimen>
     <dimen name="line_spacing_extra">2dp</dimen>
+    <dimen name="tv_title_padding_bottom">10dp</dimen>
 </resources>

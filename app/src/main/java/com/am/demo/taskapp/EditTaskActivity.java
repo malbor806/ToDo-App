@@ -18,6 +18,7 @@ import java.util.List;
 
 public class EditTaskActivity extends AppCompatActivity {
     private static final String TASK_ID = "TASK_ID";
+    private static final String MINI_TASK_LIST = "MINI_TASK_LIST";
     private static TaskDAO taskDAO;
     private EditText titleEditText;
     private EditText descriptionEditText;
@@ -25,9 +26,9 @@ public class EditTaskActivity extends AppCompatActivity {
     private LinearLayout checkboxListLinearLayout;
     private LinearLayout todoLinearList;
     private Button addNewMiniTaskButton;
-    private Task task;
     private List<MiniTask> miniTaskList;
     private ArrayList<String> miniTasks;
+    private Task task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +36,16 @@ public class EditTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_task);
         findViews();
         taskDAO = TaskDAO.getInstance(getBaseContext());
-        Intent intent = getIntent();
-        if (intent != null) {
-            int id = intent.getIntExtra(TASK_ID, 0);
-            if (id != 0) {
-                task = taskDAO.getTaskById(id);
-                setEditInformation(task);
-            }
-        }
         setListener();
         if (savedInstanceState == null) {
+            Intent intent = getIntent();
+            if (intent != null) {
+                int id = intent.getIntExtra(TASK_ID, 0);
+                if (id != 0) {
+                    task = taskDAO.getTaskById(id);
+                    setEditInformation(task);
+                }
+            }
             miniTasks = new ArrayList<>();
             createTodoLinearList();
             checkboxListLinearLayout.addView(todoLinearList);
@@ -73,6 +74,7 @@ public class EditTaskActivity extends AppCompatActivity {
             restoreMiniTaskName();
         }
     }
+
 
     private void restoreMiniTaskName() {
         for (int i = 0; i < miniTaskList.size(); i++) {
@@ -149,7 +151,6 @@ public class EditTaskActivity extends AppCompatActivity {
         return task;
     }
 
-
     private void createCheckBoxList() {
         createTodoLinearList();
         checkboxListLinearLayout.addView(todoLinearList);
@@ -159,7 +160,7 @@ public class EditTaskActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         saveMiniTaskCheckList();
-        savedInstanceState.putStringArrayList("miniTasks", miniTasks);
+        savedInstanceState.putStringArrayList(MINI_TASK_LIST, miniTasks);
     }
 
     private void saveMiniTaskCheckList() {
@@ -171,11 +172,10 @@ public class EditTaskActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        miniTasks = savedInstanceState.getStringArrayList("miniTasks");
+        miniTasks = savedInstanceState.getStringArrayList(MINI_TASK_LIST);
         restoreMiniTaskList();
     }
 
@@ -185,8 +185,6 @@ public class EditTaskActivity extends AppCompatActivity {
                 restoreMiniTask(miniTasks.get(i));
         }
     }
-
-
 
 
 }
