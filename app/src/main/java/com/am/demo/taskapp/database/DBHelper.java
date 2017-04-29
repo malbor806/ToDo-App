@@ -12,11 +12,13 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static int DB_VERSION = 1;
     private final static String DB_NAME = "AppDB.db";
     private static final String TASKS = "tasks";
-    private static final String TASK_ID = "tasks._id";
+    private static final String TASK_ID = "_id";
     private static final String TASK_TITLE = "task_title";
     private static final String TASK_DESCRIPTION = "task_description";
     private static final String TASK_LIST = "task_list";
     private static final String CHECKLIST = "checklist";
+    private static final String CHECK_ID = "_idCheck";
+    private static final String CHECK_ISCHECKED = "is_checked";
     private static final String CHECKTASK = "check_task";
 
     public DBHelper(Context context) {
@@ -41,8 +43,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 "create table "
                 + CHECKLIST
                 + " ( "
+                + CHECK_ID
+                + " integer primary key autoincrement, "
                 + TASK_ID
                 + " integer, "
+                + CHECK_ISCHECKED
+                + " boolean default false, "
                 + CHECKTASK
                 + " text)"
         );
