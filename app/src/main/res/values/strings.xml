@@ -9,4 +9,6 @@
     <string name="save">Save</string>
     <string name="edit">Edit</string>
     <string name="add_new_task">Add new task</string>
+    <string name="description_example">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ex enim, mollis quis erat id, vehicula volutpat ipsum. Nullam leo sapien, iaculis non odio sed, iaculis elementum nibh. Sed ut risus eu mi vulputate convallis. Nullam eu egestas sem. In velit erat, tempor ac orci ut, hendrerit accumsan nibh. Donec tincidunt egestas rutrum.</string>
+    <string name="add">ADD</string>
 </resources>

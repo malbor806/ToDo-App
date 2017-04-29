@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:id="@+id/ll_fragmentInformation"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="@dimen/ll_main_padding"
         android:layout_height="wrap_content"
         >
 
@@ -28,7 +28,9 @@
             android:id="@+id/tv_taskTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="26dp"
+            android:textSize="@dimen/title_size"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/title_margin_bottom"
             tools:text="Title"
             />
 
@@ -36,14 +38,17 @@
             android:id="@+id/tv_taskDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ex enim, mollis quis erat id, vehicula volutpat ipsum. Nullam leo sapien, iaculis non odio sed, iaculis elementum nibh. Sed ut risus eu mi vulputate convallis. Nullam eu egestas sem. In velit erat, tempor ac orci ut, hendrerit accumsan nibh. Donec tincidunt egestas rutrum. "/>
+            android:padding="@dimen/ll_description_padding"
+            android:lineSpacingExtra="@dimen/line_spacing_extra"
+            tools:text="@string/description_example"/>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/ll_checkboxList" />
+            android:id="@+id/ll_checkboxList"
+            android:paddingLeft="20dp"/>
 
     </LinearLayout>
     </ScrollView>

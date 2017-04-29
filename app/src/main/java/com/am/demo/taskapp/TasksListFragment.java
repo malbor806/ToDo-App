@@ -44,6 +44,17 @@ public class TasksListFragment extends Fragment {
         addNewTaskFloatingActionButton = (FloatingActionButton) getView().findViewById(R.id.fab_addNewTask);
     }
 
+    private void setListeners() {
+        addNewTaskFloatingActionButton.setOnClickListener(v -> {
+            startEditTaskActivity();
+        });
+    }
+
+    private void startEditTaskActivity() {
+        Intent intent = new Intent(getActivity(), EditTaskActivity.class);
+        getActivity().startActivity(intent);
+    }
+
     private void setRecyclerView() {
         tasksRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         TasksRecyclerViewAdapter adapter = new TasksRecyclerViewAdapter();
@@ -52,28 +63,31 @@ public class TasksListFragment extends Fragment {
         adapter.setTasks(taskDAO.getAllTasks());
     }
 
-
     private void showTaskDetails(Task task) {
+        popFromBackStack();
+        InformationFragment informationFragment = new InformationFragment();
+        addArgumentsForInformationFragment(task, informationFragment);
+        startInformationFragmentTransaction(informationFragment);
+    }
+
+    private void popFromBackStack() {
         if (getActivity().getSupportFragmentManager().findFragmentById(R.id.container_fragmentInformation) != null) {
             getActivity().getSupportFragmentManager().popBackStack();
         }
-        InformationFragment informationFragment = new InformationFragment();
+    }
+
+    private void addArgumentsForInformationFragment(Task task, InformationFragment informationFragment) {
         Bundle args = new Bundle();
         args.putInt(TASK_ID, task.getId());
         informationFragment.setArguments(args);
+    }
+
+    private void startInformationFragmentTransaction(InformationFragment informationFragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container_fragmentInformation ,
                 informationFragment, MainActivity.TAG);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
-
-    private void setListeners() {
-        addNewTaskFloatingActionButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), EditTaskActivity.class);
-            getActivity().startActivity(intent);
-//            getActivity().startActivityForResult(intent, 100);
-        });
     }
 
     @Override

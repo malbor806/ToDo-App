@@ -1,3 +1,8 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="title_size">30sp</dimen>
+    <dimen name="ll_main_padding">10dp</dimen>
+    <dimen name="ll_description_padding">5dp</dimen>
+    <dimen name="title_margin_bottom">10dp</dimen>
+    <dimen name="line_spacing_extra">2dp</dimen>
 </resources>
