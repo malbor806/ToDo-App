@@ -79,6 +79,7 @@ public class EditTaskActivity extends AppCompatActivity {
         });
     }
 
+
     private void addNewTaskToDatabase() {
         if (task == null) {
             task = createNewTask();
