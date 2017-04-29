@@ -10,14 +10,14 @@ import java.util.ArrayList;
  */
 
 public class Task implements Parcelable {
-    private static int counter = 0;
+    public static int counter = 0;
     private int id;
     private String title;
     private String description;
     private ArrayList<String> taskList;
 
     public Task() {
-        id = counter++;
+        id = 0;
         title = "";
         description = "";
         taskList = new ArrayList<>();
@@ -56,6 +56,10 @@ public class Task implements Parcelable {
 
     public ArrayList<String> getTaskList() {
         return taskList;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setTitle(String title) {

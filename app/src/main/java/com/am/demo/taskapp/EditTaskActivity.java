@@ -1,52 +1,61 @@
 package com.am.demo.taskapp;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.am.demo.taskapp.database.TaskDAO;
 import com.am.demo.taskapp.model.Task;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EditTaskActivity extends AppCompatActivity {
     private static final String TASK = "TASK";
     private EditText titleEditText;
     private EditText descriptionEditText;
     private Button saveChangesButton;
-    private CheckBox addCheckListCheckBox;
     private LinearLayout checkboxListLinearLayout;
-    private static SharedPreferences sharedPreferences;
-    private LinearLayout listLinearLayout;
-    private EditText listEditText;
-    private CheckBox checkBox;
+    private LinearLayout todoLinearList;
+    private Button addNewMiniTaskButton;
     private Intent intent;
-    private List<Task> tasks;
     private Task task;
+    private ArrayList<String> miniTasks;
+    private static TaskDAO taskDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
         findViews();
+        taskDAO = TaskDAO.getInstance(getBaseContext());
         intent = getIntent();
         if (intent != null) {
-            task = intent.getParcelableExtra("TASK");
-            tasks = intent.getParcelableArrayListExtra("TASKS");
-            if (task != null) {
+            int id = intent.getIntExtra("TASK", 0);
+            if (id != 0) {
+                task = taskDAO.getTaskById(id);
                 setEditInformation(task);
             }
         }
         setListener();
+        if (savedInstanceState == null) {
+            miniTasks = new ArrayList<>();
+            checkboxListLinearLayout.addView(todoLinearList);
+        }
+    }
+
+    private void findViews() {
+        titleEditText = (EditText) findViewById(R.id.et_setTitle);
+        descriptionEditText = (EditText) findViewById(R.id.et_setDescription);
+        saveChangesButton = (Button) findViewById(R.id.b_saveChanges);
+        checkboxListLinearLayout = (LinearLayout) findViewById(R.id.ll_checkboxList);
+        addNewMiniTaskButton = (Button) findViewById(R.id.b_addNewMiniTask);
+        View inflatedView = getLayoutInflater().inflate(R.layout.minitask_layout, null);
+        todoLinearList = (LinearLayout) inflatedView.findViewById(R.id.ll_todoItem);
     }
 
     private void setEditInformation(Task task) {
@@ -54,120 +63,91 @@ public class EditTaskActivity extends AppCompatActivity {
         descriptionEditText.setText(task.getDescription());
     }
 
-    private void findViews() {
-        titleEditText = (EditText) findViewById(R.id.et_setTitle);
-        descriptionEditText = (EditText) findViewById(R.id.et_setDescription);
-        saveChangesButton = (Button) findViewById(R.id.b_saveChanges);
-        addCheckListCheckBox = (CheckBox) findViewById(R.id.cb_addCheckList);
-        checkboxListLinearLayout = (LinearLayout) findViewById(R.id.ll_checkboxList);
-    }
-
     private void setListener() {
         saveChangesButton.setOnClickListener(v -> {
-            if (task == null) {
-                task = createNewTask();
-                tasks.add(task);
+            if (titleEditText.getText().length() == 0) {
+                Toast.makeText(getBaseContext(), "Title cannot be empty!", Toast.LENGTH_SHORT).show();
             } else {
-                task.setTitle(String.valueOf(titleEditText.getText()));
-                task.setDescription(String.valueOf(descriptionEditText.getText()));
-                tasks.set(task.getId(), task);
+                addNewTaskToDatabase();
             }
-            addList(task);
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putParcelableArrayListExtra("TASKS", (ArrayList<? extends Parcelable>) tasks);
-            intent.putExtra("ID", task.getId());
-            setResult(RESULT_OK, intent);
-            //  EditTaskActivity.this.startActivityForResult(intent, 100);//REQUEST_CODE);
-            finish();
         });
-        addCheckListCheckBox.setOnClickListener(new View.OnClickListener() {
+        addNewMiniTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (addCheckListCheckBox.isChecked()) {
-                    if (checkboxListLinearLayout.getChildCount() > 0)
-                        checkboxListLinearLayout.setVisibility(View.VISIBLE);
-                    else {
-                        createCheckBoxList();
-                        createCheckBoxList();
-                    }
-                } else {
-                    checkboxListLinearLayout.setVisibility(View.GONE);
-                }
-
+                createCheckBoxList();
             }
         });
     }
 
-    private void setEditTextListener(EditText editText, CheckBox checkBox) {
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
-
-                }
-            }
-        });
-       /* editText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int a = editText.getText().length();
-                v.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        int b = editText.getText().length();
-                        if (!hasFocus) {
-                            if (a!=b) {
-                                createCheckBoxList();
-                            }
-                        }
-                    }
-                });
-            }
-        });
-*/
-/*
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                checkBox.setText(editText.getText());
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });*/
-    }
-
-    private void addList(Task task) {
-        ArrayList<String> e = task.getTaskList();
-        for (int i = 0; i < checkboxListLinearLayout.getChildCount(); i++) {
-            CheckBox c = (CheckBox) checkboxListLinearLayout.getChildAt(i);
-            e.add((String) c.getText());
+    private void addNewTaskToDatabase() {
+        if (task == null) {
+            task = createNewTask();
+            taskDAO.insertTask(task);
+        } else {
+            task.setTitle(String.valueOf(titleEditText.getText()));
+            task.setDescription(String.valueOf(descriptionEditText.getText()));
         }
-        task.setTaskList(e);
-    }
 
-    private void createCheckBoxList() {
-        listLinearLayout = new LinearLayout(this);
-        CheckBox cb = new CheckBox(this);
-        EditText et = new EditText(this);
-        setEditTextListener(et, cb);
-        listLinearLayout.addView(cb);
-        listLinearLayout.addView(et);
-        checkboxListLinearLayout.addView(listLinearLayout);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("ID", task.getId());
+          setResult(RESULT_OK, intent);
+
+        finish();
     }
 
     private Task createNewTask() {
         Task task = new Task();
+        task.setId(taskDAO.getDatabaseSize()+1);
         task.setTitle(String.valueOf(titleEditText.getText()));
         task.setDescription(String.valueOf(descriptionEditText.getText()));
+        saveMiniTaskCheckList();
+        taskDAO.insertTaskList(miniTasks, task.getId());
         return task;
     }
 
 
+    private void createCheckBoxList() {
+        View inflatedView = getLayoutInflater().inflate(R.layout.minitask_layout, null);
+        todoLinearList = (LinearLayout) inflatedView.findViewById(R.id.ll_todoItem);
+        checkboxListLinearLayout.addView(todoLinearList);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        saveMiniTaskCheckList();
+        savedInstanceState.putStringArrayList("miniTasks", miniTasks);
+    }
+
+    private void saveMiniTaskCheckList() {
+        miniTasks = new ArrayList<>();
+        for(int i= 0; i< checkboxListLinearLayout.getChildCount(); i++){
+            LinearLayout ll = (LinearLayout) checkboxListLinearLayout.getChildAt(i);
+            EditText et = (EditText) ll.getChildAt(1);
+            miniTasks.add(String.valueOf(et.getText()));
+        }
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        miniTasks = savedInstanceState.getStringArrayList("miniTasks");
+        restoreMiniTaskList();
+    }
+
+    private void restoreMiniTaskList() {
+        for (int i = 0; i < miniTasks.size(); i++){
+            if(miniTasks.get(i).length() > 0)
+                restoreMiniTask(miniTasks.get(i));
+        }
+    }
+
+    private void restoreMiniTask(String name){
+        View inflatedView = getLayoutInflater().inflate(R.layout.minitask_layout, null);
+        todoLinearList = (LinearLayout) inflatedView.findViewById(R.id.ll_todoItem);
+        EditText et = (EditText) todoLinearList.getChildAt(1);
+        et.setText(name);
+        checkboxListLinearLayout.addView(todoLinearList);
+    }
 }
