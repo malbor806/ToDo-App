@@ -1,8 +1,6 @@
 package com.am.demo.taskapp;
 
-
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -17,15 +15,13 @@ import com.am.demo.taskapp.adapter.TasksRecyclerViewAdapter;
 import com.am.demo.taskapp.database.TaskDAO;
 import com.am.demo.taskapp.model.Task;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class TasksListFragment extends Fragment {
+    private static final String TASK_ID = "TASK_ID";
     private RecyclerView tasksRecyclerView;
     private FloatingActionButton addNewTaskFloatingActionButton;
-    private TasksRecyclerViewAdapter adapter;
-    private InformationFragment informationFragment;
     private TaskDAO taskDAO;
 
     @Override
@@ -40,7 +36,6 @@ public class TasksListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         taskDAO = TaskDAO.getInstance(getContext());
         findViews();
-        setRecyclerView();
         setListeners();
     }
 
@@ -51,7 +46,7 @@ public class TasksListFragment extends Fragment {
 
     private void setRecyclerView() {
         tasksRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new TasksRecyclerViewAdapter();
+        TasksRecyclerViewAdapter adapter = new TasksRecyclerViewAdapter();
         tasksRecyclerView.setAdapter(adapter);
         adapter.setOnTaskClickListener(this::showTaskDetails);
         adapter.setTasks(taskDAO.getAllTasks());
@@ -62,9 +57,9 @@ public class TasksListFragment extends Fragment {
         if (getActivity().getSupportFragmentManager().findFragmentById(R.id.container_fragmentInformation) != null) {
             getActivity().getSupportFragmentManager().popBackStack();
         }
-        informationFragment = new InformationFragment();
+        InformationFragment informationFragment = new InformationFragment();
         Bundle args = new Bundle();
-        args.putInt("TASK", task.getId());
+        args.putInt(TASK_ID, task.getId());
         informationFragment.setArguments(args);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container_fragmentInformation ,

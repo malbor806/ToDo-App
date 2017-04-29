@@ -118,7 +118,7 @@ public class TaskDAO {
                 new String[]{TASK_ID, TASK_TITLE, TASK_DESCRIPTION},
                 null, null, null, null, null
         );
-        List results = new ArrayList<>();
+        List<Task> results = new ArrayList<>();
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 results.add(mapCursorToTask(cursor));
@@ -130,7 +130,7 @@ public class TaskDAO {
     public List getAllMiniTasks(int id){
         Cursor cursor = dbHelper.getReadableDatabase()
                 .rawQuery("select * from " + CHECKLIST + " where " + TASK_ID + " = " + id, null);
-        List results = new ArrayList<>();
+        List<MiniTask> results = new ArrayList<>();
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 results.add(mapCursorToCheck(cursor));
