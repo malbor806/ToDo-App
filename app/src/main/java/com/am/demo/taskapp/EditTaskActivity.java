@@ -38,17 +38,27 @@ public class EditTaskActivity extends AppCompatActivity {
         taskDAO = TaskDAO.getInstance(getBaseContext());
         setListener();
         if (savedInstanceState == null) {
-            Intent intent = getIntent();
-            if (intent != null) {
-                int id = intent.getIntExtra(TASK_ID, 0);
-                if (id != 0) {
-                    task = taskDAO.getTaskById(id);
-                    setEditInformation(task);
-                }
-            }
+            generateTask(1);
             miniTasks = new ArrayList<>();
             createTodoLinearList();
             checkboxListLinearLayout.addView(todoLinearList);
+        }
+        else{
+            generateTask(0);
+        }
+
+    }
+
+    private void generateTask(int FLAG) {
+        Intent intent = getIntent();
+        if (intent != null) {
+            int id = intent.getIntExtra(TASK_ID, 0);
+            if (id != 0) {
+                task = taskDAO.getTaskById(id);
+                miniTaskList = taskDAO.getAllMiniTasks(task.getId());
+                if (FLAG == 1)
+                    setEditInformation(task);
+            }
         }
     }
 
@@ -69,7 +79,6 @@ public class EditTaskActivity extends AppCompatActivity {
     private void setEditInformation(Task task) {
         titleEditText.setText(task.getTitle());
         descriptionEditText.setText(task.getDescription());
-        miniTaskList = taskDAO.getAllMiniTasks(task.getId());
         if (miniTaskList != null) {
             restoreMiniTaskName();
         }
@@ -185,6 +194,5 @@ public class EditTaskActivity extends AppCompatActivity {
                 restoreMiniTask(miniTasks.get(i));
         }
     }
-
 
 }

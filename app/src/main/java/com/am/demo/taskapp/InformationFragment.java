@@ -18,6 +18,7 @@ import com.am.demo.taskapp.database.TaskDAO;
 import com.am.demo.taskapp.model.MiniTask;
 import com.am.demo.taskapp.model.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -52,7 +53,6 @@ public class InformationFragment extends Fragment {
     }
 
     private void findViews() {
-
         titleTextView = (TextView) getView().findViewById(R.id.tv_taskTitle);
         descriptionTextView = (TextView) getView().findViewById(R.id.tv_taskDescription);
         editTaskButton = (Button) getView().findViewById(R.id.b_editButton);
@@ -109,8 +109,16 @@ public class InformationFragment extends Fragment {
         CheckBox checkBox = new CheckBox(getContext());
         checkBox.setChecked(mt.isChecked());
         checkBox.setText(mt.getName());
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mt.setChecked(isChecked));
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            mt.setChecked(isChecked);
+        });
         return checkBox;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        taskDAO.addAndUpdateMiniTaskList((ArrayList<MiniTask>) miniTaskList, task.getId());
     }
 
     @Override

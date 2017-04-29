@@ -160,7 +160,7 @@ public class TaskDAO {
         updateMiniTaskList(miniTasks, id);
     }
 
-    private void updateMiniTaskList(ArrayList<MiniTask> miniTasks, int taskId) {
+    public void updateMiniTaskList(ArrayList<MiniTask> miniTasks, int taskId) {
         for(MiniTask mt : miniTasks)
             insertUpdatedTaskList(mt, taskId );
     }
