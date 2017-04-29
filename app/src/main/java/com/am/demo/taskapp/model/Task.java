@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 
 public class Task implements Parcelable {
-    private static int counter = 0;
+    public static int counter = 0;
     private int id;
     private String title;
     private String description;

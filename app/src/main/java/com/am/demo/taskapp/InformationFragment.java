@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.am.demo.taskapp.database.TaskDAO;
 import com.am.demo.taskapp.model.Task;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class InformationFragment extends Fragment {
     private TextView descriptionTextView;
     private Button editTaskButton;
     private Task task;
-    private List<Task> tasks;
+    private TaskDAO taskDAO;
 
 
     @Override
@@ -44,6 +45,7 @@ public class InformationFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
        findViews();
+        taskDAO = TaskDAO.getInstance(getContext());
         setInformation();
         setListener();
     }
@@ -56,8 +58,7 @@ public class InformationFragment extends Fragment {
 
     private void setInformation() {
         if(getArguments() != null){
-            task = (Task) getArguments().get("TASK");
-            tasks = getArguments().getParcelableArrayList("TASKS");
+            task = taskDAO.getTaskById((Integer) getArguments().get("TASK"));
             if(task != null){
                 titleTextView.setText(task.getTitle());
                 descriptionTextView.setText(task.getDescription());
@@ -71,7 +72,6 @@ public class InformationFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), EditTaskActivity.class);
                 intent.putExtra(TASK, task);
-                intent.putParcelableArrayListExtra("TASKS", (ArrayList<? extends Parcelable>) tasks);
                 getActivity().startActivityForResult(intent, 100);
             }
         });
