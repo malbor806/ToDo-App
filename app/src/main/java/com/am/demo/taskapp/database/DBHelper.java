@@ -35,7 +35,6 @@ public class DBHelper extends SQLiteOpenHelper {
                         + " text, "
                         + TASK_DESCRIPTION
                         + " text) "
-
         );
         db.execSQL(
                 "create table "

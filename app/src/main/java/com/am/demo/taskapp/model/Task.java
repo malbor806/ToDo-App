@@ -3,8 +3,6 @@ package com.am.demo.taskapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-
 /**
  * Created by malbor806 on 23.04.2017.
  */

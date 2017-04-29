@@ -22,22 +22,16 @@ import com.am.demo.taskapp.model.Task;
  * A simple {@link Fragment} subclass.
  */
 public class TasksListFragment extends Fragment {
-    private static final String TASK = "TASK";
-    private static final int REQUEST_CODE = 100;
     private RecyclerView tasksRecyclerView;
     private FloatingActionButton addNewTaskFloatingActionButton;
     private TasksRecyclerViewAdapter adapter;
     private InformationFragment informationFragment;
-    private SharedPreferences sharedPrefences;
-    private Task task;
     private TaskDAO taskDAO;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setRetainInstance(true);
-
         return inflater.inflate(R.layout.fragment_tasks_list, container, false);
     }
 
@@ -49,7 +43,6 @@ public class TasksListFragment extends Fragment {
         setRecyclerView();
         setListeners();
     }
-
 
     private void findViews() {
         tasksRecyclerView = (RecyclerView) getView().findViewById(R.id.rv_taskList);

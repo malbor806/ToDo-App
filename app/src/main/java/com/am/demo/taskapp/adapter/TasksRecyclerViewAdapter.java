@@ -52,15 +52,14 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView titleTextView;
-        private TextView decriptionTextView;
+        private TextView descriptionTextView;
         private OnTaskClickListener onTaskClickListener;
         private Task task;
 
-
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             titleTextView = (TextView) itemView.findViewById(R.id.tv_listTaskTitle);
-            decriptionTextView = (TextView) itemView.findViewById(R.id.tv_listDescription);
+            descriptionTextView = (TextView) itemView.findViewById(R.id.tv_listDescription);
             itemView.setOnClickListener(v -> {
                         if (onTaskClickListener != null) {
                             onTaskClickListener.onTaskClick(task);
@@ -72,7 +71,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         void bind(Task task) {
             this.task = task;
             titleTextView.setText(task.getTitle());
-            decriptionTextView.setText(task.getDescription());
+            descriptionTextView.setText(task.getDescription());
         }
 
         public void setOnTaskClickListener(OnTaskClickListener onTaskClickListener) {

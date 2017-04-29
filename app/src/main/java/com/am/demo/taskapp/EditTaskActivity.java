@@ -98,7 +98,7 @@ public class EditTaskActivity extends AppCompatActivity {
     private void addNewTaskToDatabase() {
         if (task == null) {
             task = createNewTask();
-            taskDAO.insertTask(task);
+            taskDAO.insertNewTask(task);
         } else {
             task.setTitle(String.valueOf(titleEditText.getText()));
             task.setDescription(String.valueOf(descriptionEditText.getText()));
@@ -135,7 +135,7 @@ public class EditTaskActivity extends AppCompatActivity {
         task.setTitle(String.valueOf(titleEditText.getText()));
         task.setDescription(String.valueOf(descriptionEditText.getText()));
         saveMiniTaskCheckList();
-        taskDAO.insertTaskList(miniTasks, task.getId());
+        taskDAO.insertMiniTaskList(miniTasks, task.getId());
         return task;
     }
 

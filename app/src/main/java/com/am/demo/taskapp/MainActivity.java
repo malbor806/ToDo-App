@@ -1,6 +1,5 @@
 package com.am.demo.taskapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -17,25 +16,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         if (findViewById(R.id.container_rootFragment) != null) {
             if (savedInstanceState != null) {
                 return;
             }
-
-            if (findViewById(R.id.container_fragmentTasksList) != null) {
-                tasksListFragment = new TasksListFragment();
-                if (task != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(TASK, task);
-                    tasksListFragment.setArguments(bundle);
-                }
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container_fragmentTasksList, tasksListFragment, TAG).commit();
-            }
+            startNewTaskListFragment();
         }
     }
 
+    private void startNewTaskListFragment() {
+        if (findViewById(R.id.container_fragmentTasksList) != null) {
+            tasksListFragment = new TasksListFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container_fragmentTasksList, tasksListFragment, TAG).commit();
+        }
+    }
 
 }
