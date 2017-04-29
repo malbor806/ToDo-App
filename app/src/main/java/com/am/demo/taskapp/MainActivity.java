@@ -37,26 +37,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Bundle extras = data.getExtras();
-                if (extras != null) {
-                    int id = extras.getInt("ID");
-                    tasksListFragment = new TasksListFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("ID", id);
-                        tasksListFragment.setArguments(bundle);
-
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container_fragmentTasksList, tasksListFragment, TAG).commitAllowingStateLoss();
-                }
-
-            }
-        }
-    }
-
-
 
 }

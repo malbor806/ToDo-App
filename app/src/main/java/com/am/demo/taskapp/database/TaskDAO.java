@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.am.demo.taskapp.model.MiniTask;
 import com.am.demo.taskapp.model.Task;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class TaskDAO {
     private static final String TASK_TITLE = "task_title";
     private static final String TASK_DESCRIPTION = "task_description";
     private static final String CHECKLIST = "checklist";
-    private static final String CHECK_ID = "_id";
+    private static final String CHECK_ID = "_idCheck";
     private static final String CHECK_ISCHECKED = "is_checked";
     private static final String CHECK_NAME = "check_task";
 
@@ -75,6 +76,7 @@ public class TaskDAO {
         int titleColumnId = cursor.getColumnIndex(TASK_TITLE);
         int descriptionColumnId = cursor.getColumnIndex(TASK_DESCRIPTION);
         Task task = new Task();
+        task.setId(cursor.getInt(idColumnId));
         task.setTitle(cursor.getString(titleColumnId));
         task.setDescription(cursor.getString(descriptionColumnId));
         return task;
@@ -116,4 +118,76 @@ public class TaskDAO {
 
         return results;
     }
+
+    public List getAllMiniTasks(int id){
+      /*  Cursor cursor = dbHelper.getReadableDatabase().query(CHECKLIST,
+                new String[]{CHECK_ID, CHECK_ISCHECKED, CHECK_NAME},
+                null, null, null, null, null
+        );*/
+        Cursor cursor = dbHelper.getReadableDatabase().rawQuery("select * from " + CHECKLIST + " where " + TASK_ID + " = " + id, null);
+
+        List results = new ArrayList<>();
+
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                results.add(mapCursorToCheck(cursor));
+            }
+        }
+        return results;
+    }
+
+    private MiniTask mapCursorToCheck(Cursor cursor) {
+        int idColumnId = cursor.getColumnIndex(CHECK_ID);
+        int isCheckedColumnId = cursor.getColumnIndex(CHECK_ISCHECKED);
+        int nameColumnId = cursor.getColumnIndex(CHECK_NAME);
+        MiniTask miniTask = new MiniTask();
+        miniTask.setId(cursor.getInt(idColumnId));
+        miniTask.setChecked(cursor.getInt(isCheckedColumnId) > 0);
+        miniTask.setName(cursor.getString(nameColumnId));
+        return miniTask;
+    }
+
+    public void addAndUpdateMiniTaskList(ArrayList<MiniTask> miniTasks, int id){
+        deleteMiniTaskList(id);
+        updateMiniTaskList(miniTasks, id);
+    }
+
+    public void deleteMiniTaskList(int id) {
+        dbHelper.getWritableDatabase().delete(CHECKLIST,
+                " " + TASK_ID + " = ? ",
+                new String[]{String.valueOf(id)}
+        );
+    }
+
+    public void updateMiniTaskList(ArrayList<MiniTask> miniTasks, int taskId){
+        for(MiniTask mt : miniTasks)
+            insertUpdatedTaskList(mt, taskId );
+    }
+
+    public void updateMiniTask(final MiniTask miniTask) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CHECK_ISCHECKED, miniTask.isChecked());
+        contentValues.put(CHECK_NAME, miniTask.getName());
+
+        String id = String.valueOf(miniTask.getId());
+        dbHelper.getWritableDatabase().update(CHECKLIST,
+                contentValues,
+                " " + CHECK_ID + " = ? ",
+                new String[]{id}
+        );
+    }
+
+    public void insertUpdatedTaskList(MiniTask miniTask, int id){
+        ContentValues contentValues = new ContentValues();
+            contentValues.put(TASK_ID, id);
+            contentValues.put(CHECK_NAME, miniTask.getName());
+            contentValues.put(CHECK_ISCHECKED, miniTask.isChecked());
+            dbHelper.getWritableDatabase().insert(CHECKLIST, null, contentValues);
+
+
+    }
+
+
+
+
 }

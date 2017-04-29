@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="10dp"
+        >
 
         <Button
             android:id="@+id/b_editButton"
@@ -33,6 +34,19 @@
             android:layout_height="wrap_content"
             tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ex enim, mollis quis erat id, vehicula volutpat ipsum. Nullam leo sapien, iaculis non odio sed, iaculis elementum nibh. Sed ut risus eu mi vulputate convallis. Nullam eu egestas sem. In velit erat, tempor ac orci ut, hendrerit accumsan nibh. Donec tincidunt egestas rutrum. "/>
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/ll_checkboxList">
+
+            </LinearLayout>
+
+        </ScrollView>
     </LinearLayout>
 
 

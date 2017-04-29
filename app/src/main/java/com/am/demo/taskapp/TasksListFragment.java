@@ -83,9 +83,14 @@ public class TasksListFragment extends Fragment {
     private void setListeners() {
         addNewTaskFloatingActionButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), EditTaskActivity.class);
-          //  getActivity().startActivity(intent);
-            getActivity().startActivityForResult(intent, 100);
+            getActivity().startActivity(intent);
+//            getActivity().startActivityForResult(intent, 100);
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setRecyclerView();
+    }
 }
