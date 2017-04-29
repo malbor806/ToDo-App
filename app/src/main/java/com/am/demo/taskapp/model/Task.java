@@ -14,20 +14,17 @@ public class Task implements Parcelable {
     private int id;
     private String title;
     private String description;
-    private ArrayList<String> taskList;
 
     public Task() {
         id = 0;
         title = "";
         description = "";
-        taskList = new ArrayList<>();
     }
 
     protected Task(Parcel in) {
         id = in.readInt();
         title = in.readString();
         description = in.readString();
-        taskList = in.createStringArrayList();
     }
 
     public static final Creator<Task> CREATOR = new Creator<Task>() {
@@ -54,9 +51,6 @@ public class Task implements Parcelable {
         return description;
     }
 
-    public ArrayList<String> getTaskList() {
-        return taskList;
-    }
 
     public void setId(int id) {
         this.id = id;
@@ -70,9 +64,6 @@ public class Task implements Parcelable {
         this.description = description;
     }
 
-    public void setTaskList(ArrayList<String> taskList) {
-        this.taskList = taskList;
-    }
 
     @Override
     public int describeContents() {
@@ -84,6 +75,5 @@ public class Task implements Parcelable {
         dest.writeInt(id);
         dest.writeString(title);
         dest.writeString(description);
-        dest.writeStringList(taskList);
     }
 }

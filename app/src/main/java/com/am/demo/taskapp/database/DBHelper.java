@@ -15,7 +15,6 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TASK_ID = "tasks._id";
     private static final String TASK_TITLE = "task_title";
     private static final String TASK_DESCRIPTION = "task_description";
-    private static final String TASK_LIST = "task_list";
     private static final String CHECKLIST = "checklist";
     private static final String CHECKTASK = "check_task";
 
@@ -33,9 +32,8 @@ public class DBHelper extends SQLiteOpenHelper {
                         + TASK_TITLE
                         + " text, "
                         + TASK_DESCRIPTION
-                        + " text, "
-                        + TASK_LIST
-                        + " text)"
+                        + " text) "
+
         );
         db.execSQL(
                 "create table "

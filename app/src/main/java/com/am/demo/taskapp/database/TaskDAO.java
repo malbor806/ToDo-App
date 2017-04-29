@@ -21,7 +21,6 @@ public class TaskDAO {
     private static final String TASK_ID = "tasks._id";
     private static final String TASK_TITLE = "task_title";
     private static final String TASK_DESCRIPTION = "task_description";
-    private static final String TASK_LIST = "task_list";
     private static final String CHECKLIST = "checklist";
     private static final String CHECKTASK = "check_task";
 
@@ -42,7 +41,6 @@ public class TaskDAO {
         ContentValues contentValues = new ContentValues();
         contentValues.put(TASK_TITLE, task.getTitle());
         contentValues.put(TASK_DESCRIPTION, task.getDescription());
-        contentValues.put(TASK_LIST, String.valueOf(task.getTaskList()));
         dbHelper.getWritableDatabase().insert(TASKS, null, contentValues);
     }
 
@@ -60,14 +58,10 @@ public class TaskDAO {
         int idColumnId = cursor.getColumnIndex(TASK_ID);
         int titleColumnId = cursor.getColumnIndex(TASK_TITLE);
         int descriptionColumnId = cursor.getColumnIndex(TASK_DESCRIPTION);
-        int listColumnId = cursor.getColumnIndex(TASK_LIST);
         Task task = new Task();
         task.setId(cursor.getInt(idColumnId));
         task.setTitle(cursor.getString(titleColumnId));
         task.setDescription(cursor.getString(descriptionColumnId));
-        String tasksList = cursor.getString(listColumnId);
-        List<String> myList = new ArrayList<String>(Arrays.asList(tasksList.split(",")));
-        task.setTaskList((ArrayList<String>) myList);
         return task;
     }
 
@@ -76,7 +70,6 @@ public class TaskDAO {
         ContentValues contentValues = new ContentValues();
         contentValues.put(TASK_TITLE, task.getTitle());
         contentValues.put(TASK_DESCRIPTION, task.getDescription());
-        contentValues.put(TASK_LIST, String.valueOf(task.getTaskList()));
 
         String id = String.valueOf(task.getId());
         dbHelper.getWritableDatabase().update(TASKS,
@@ -97,8 +90,7 @@ public class TaskDAO {
     // pobranie wszystkich notatek
     public List getAllTasks() {
         Cursor cursor = dbHelper.getReadableDatabase().query(TASKS,
-                new String[]{TASK_ID, TASK_TITLE, TASK_DESCRIPTION,
-                TASK_LIST},
+                new String[]{TASK_ID, TASK_TITLE, TASK_DESCRIPTION},
                 null, null, null, null, null
         );
 

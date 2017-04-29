@@ -71,7 +71,6 @@ public class EditTaskActivity extends AppCompatActivity {
                 task.setDescription(String.valueOf(descriptionEditText.getText()));
                 tasks.set(task.getId(), task);
             }
-            addList(task);
             Intent intent = new Intent(this, MainActivity.class);
             intent.putParcelableArrayListExtra("TASKS", (ArrayList<? extends Parcelable>) tasks);
             intent.putExtra("ID", task.getId());
@@ -112,14 +111,6 @@ public class EditTaskActivity extends AppCompatActivity {
 
 
 
-    private void addList(Task task) {
-        ArrayList<String> e = task.getTaskList();
-        for (int i = 0; i < checkboxListLinearLayout.getChildCount(); i++) {
-            CheckBox c = (CheckBox) checkboxListLinearLayout.getChildAt(i);
-            e.add((String) c.getText());
-        }
-        task.setTaskList(e);
-    }
 
     private void createCheckBoxList() {
         listLinearLayout = new LinearLayout(this);
