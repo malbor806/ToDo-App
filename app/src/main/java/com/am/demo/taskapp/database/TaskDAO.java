@@ -59,9 +59,12 @@ public class TaskDAO {
 
     public int generateID(){
         cursor = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM "+ TASKS+ " ORDER BY " + TASK_ID + " DESC LIMIT 1", null);
-        cursor.moveToFirst();
-        int maxid = cursor.getInt(cursor.getColumnIndex(TASK_ID));
-        return maxid;
+        if (cursor.getCount() > 0){
+            cursor.moveToFirst();
+            int maxid = cursor.getInt(cursor.getColumnIndex(TASK_ID));
+            return maxid;
+        }
+        return 1;
     }
 
     public Task getTaskById(final int id) {
