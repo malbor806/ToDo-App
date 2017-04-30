@@ -12,11 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.am.demo.taskapp.adapter.OnTaskRemoveListener;
 import com.am.demo.taskapp.adapter.SimpleItemTouchHelperCallback;
 import com.am.demo.taskapp.adapter.TasksRecyclerViewAdapter;
 import com.am.demo.taskapp.database.TaskDAO;
 import com.am.demo.taskapp.model.Task;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +29,7 @@ public class TasksListFragment extends Fragment {
     private TaskDAO taskDAO;
     private InformationFragment informationFragment;
     private FragmentTransaction fragmentTransaction;
+    TasksRecyclerViewAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,6 +44,7 @@ public class TasksListFragment extends Fragment {
         taskDAO = TaskDAO.getInstance(getContext());
         findViews();
         setListeners();
+        setRecyclerView();
     }
 
     private void findViews() {
@@ -50,9 +53,7 @@ public class TasksListFragment extends Fragment {
     }
 
     private void setListeners() {
-        addNewTaskFloatingActionButton.setOnClickListener(v -> {
-            startEditTaskActivity();
-        });
+        addNewTaskFloatingActionButton.setOnClickListener(v -> startEditTaskActivity());
     }
 
     private void startEditTaskActivity() {
@@ -62,25 +63,21 @@ public class TasksListFragment extends Fragment {
 
     private void setRecyclerView() {
         tasksRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        TasksRecyclerViewAdapter adapter = new TasksRecyclerViewAdapter(getContext());
-        tasksRecyclerView.setAdapter(adapter);
-        adapter.setOnTaskRemoveListener(new OnTaskRemoveListener() {
-            @Override
-            public void onTaskRemove() {
-               // popFromBackStack();
-                View v = getActivity().findViewById(R.id.ll_fragmentInformation);
-                if (v != null) {
-                    popFromBackStack();
-                }
-            }
-        });
-
+        adapter = new TasksRecyclerViewAdapter(getContext());
         adapter.setOnTaskClickListener(this::showTaskDetails);
-        adapter.setTasks(taskDAO.getAllTasks());
+        adapter.setOnTaskRemoveListener(this::removeFragmentIfExist);
+        tasksRecyclerView.setAdapter(adapter);
         ItemTouchHelper.Callback callback =
                 new SimpleItemTouchHelperCallback(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(tasksRecyclerView);
+    }
+
+    private void removeFragmentIfExist() {
+        View v = getActivity().findViewById(R.id.ll_fragmentInformation);
+        if (v != null) {
+            popFromBackStack();
+        }
     }
 
     private void showTaskDetails(Task task) {
@@ -113,6 +110,8 @@ public class TasksListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        setRecyclerView();
+        adapter.setTasks(taskDAO.getAllTasks());
+        adapter.notifyDataSetChanged();
     }
+
 }

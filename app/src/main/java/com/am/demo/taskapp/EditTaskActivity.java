@@ -46,7 +46,6 @@ public class EditTaskActivity extends AppCompatActivity {
         else{
             generateTask(0);
         }
-
     }
 
     private void findViews() {

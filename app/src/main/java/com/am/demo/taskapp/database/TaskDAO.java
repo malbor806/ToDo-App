@@ -64,7 +64,7 @@ public class TaskDAO {
             int maxid = cursor.getInt(cursor.getColumnIndex(TASK_ID));
             return maxid;
         }
-        return 1;
+        return 0;
     }
 
     public Task getTaskById(final int id) {

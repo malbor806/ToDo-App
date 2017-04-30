@@ -18,9 +18,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void checkIfRootFragmentIsNotNull(Bundle savedInstaceState) {
+    private void checkIfRootFragmentIsNotNull(Bundle savedInstanceState) {
         if (findViewById(R.id.container_rootFragment) != null) {
-            if (savedInstaceState != null)
+            if (savedInstanceState != null)
                 return;
             startNewTaskListFragment();
         }

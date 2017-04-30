@@ -65,8 +65,8 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
     public void onItemDismiss(int position) {
         TaskDAO taskDAO = TaskDAO.getInstance(context);
         taskDAO.deleteTaskById(tasks.get(position).getId());
-        tasks.remove(position);
         onTaskRemoveListener.onTaskRemove();
+        tasks.remove(position);
         notifyItemRemoved(position);
     }
 
