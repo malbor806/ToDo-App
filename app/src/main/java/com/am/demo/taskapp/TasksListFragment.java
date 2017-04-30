@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.am.demo.taskapp.adapter.OnTaskRemoveListener;
 import com.am.demo.taskapp.adapter.SimpleItemTouchHelperCallback;
 import com.am.demo.taskapp.adapter.TasksRecyclerViewAdapter;
 import com.am.demo.taskapp.database.TaskDAO;
@@ -25,6 +26,8 @@ public class TasksListFragment extends Fragment {
     private RecyclerView tasksRecyclerView;
     private FloatingActionButton addNewTaskFloatingActionButton;
     private TaskDAO taskDAO;
+    private InformationFragment informationFragment;
+    private FragmentTransaction fragmentTransaction;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +64,16 @@ public class TasksListFragment extends Fragment {
         tasksRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         TasksRecyclerViewAdapter adapter = new TasksRecyclerViewAdapter(getContext());
         tasksRecyclerView.setAdapter(adapter);
+        adapter.setOnTaskRemoveListener(new OnTaskRemoveListener() {
+            @Override
+            public void onTaskRemove() {
+               // popFromBackStack();
+                View v = getActivity().findViewById(R.id.ll_fragmentInformation);
+                if (v != null) {
+                    popFromBackStack();
+                }
+            }
+        });
 
         adapter.setOnTaskClickListener(this::showTaskDetails);
         adapter.setTasks(taskDAO.getAllTasks());
@@ -72,7 +85,7 @@ public class TasksListFragment extends Fragment {
 
     private void showTaskDetails(Task task) {
         popFromBackStack();
-        InformationFragment informationFragment = new InformationFragment();
+        informationFragment = new InformationFragment();
         addArgumentsForInformationFragment(task, informationFragment);
         startInformationFragmentTransaction(informationFragment);
     }
@@ -90,11 +103,11 @@ public class TasksListFragment extends Fragment {
     }
 
     private void startInformationFragmentTransaction(InformationFragment informationFragment) {
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container_fragmentInformation ,
+        fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragmentInformation,
                 informationFragment, MainActivity.TAG);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override

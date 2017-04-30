@@ -12,7 +12,6 @@ import com.am.demo.taskapp.database.TaskDAO;
 import com.am.demo.taskapp.model.Task;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,6 +22,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         implements ItemTouchHelperAdapter {
     private List<Task> tasks;
     private OnTaskClickListener onTaskClickListener;
+    private OnTaskRemoveListener onTaskRemoveListener;
     private Context context;
 
     public TasksRecyclerViewAdapter(Context context) {
@@ -66,7 +66,12 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         TaskDAO taskDAO = TaskDAO.getInstance(context);
         taskDAO.deleteTaskById(tasks.get(position).getId());
         tasks.remove(position);
+        onTaskRemoveListener.onTaskRemove();
         notifyItemRemoved(position);
+    }
+
+    public void setOnTaskRemoveListener(OnTaskRemoveListener onTaskRemoveListener) {
+        this.onTaskRemoveListener = onTaskRemoveListener;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -85,12 +90,6 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
                         }
                     }
             );
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return false;
-                }
-            });
         }
 
         void bind(Task task) {
@@ -99,7 +98,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
             descriptionTextView.setText(task.getDescription());
         }
 
-        public void setOnTaskClickListener(OnTaskClickListener onTaskClickListener) {
+        void setOnTaskClickListener(OnTaskClickListener onTaskClickListener) {
             this.onTaskClickListener = onTaskClickListener;
         }
     }
