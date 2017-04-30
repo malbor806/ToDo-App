@@ -172,7 +172,7 @@ public class EditTaskActivity extends AppCompatActivity {
         task.setTitle(String.valueOf(titleEditText.getText()));
         task.setDescription(String.valueOf(descriptionEditText.getText()));
         saveMiniTaskCheckList();
-        taskDAO.insertMiniTaskList(miniTasks, task.getId());
+        taskDAO.insertMiniTaskList(miniTasks,id);
         return task;
     }
 

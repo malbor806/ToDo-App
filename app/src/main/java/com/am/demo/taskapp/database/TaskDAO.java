@@ -16,10 +16,6 @@ import java.util.List;
  */
 
 public class TaskDAO {
-    private static TaskDAO instance;
-    private DBHelper dbHelper;
-    private ContentValues contentValues;
-    private Cursor cursor;
     private static final String TASKS = "tasks";
     private static final String TASK_ID = "_id";
     private static final String TASK_TITLE = "task_title";
@@ -28,10 +24,16 @@ public class TaskDAO {
     private static final String CHECK_ID = "_idCheck";
     private static final String CHECK_ISCHECKED = "is_checked";
     private static final String CHECK_NAME = "check_task";
+    private static TaskDAO instance;
+    private static int idCounter;
+    private DBHelper dbHelper;
+    private ContentValues contentValues;
+    private Cursor cursor;
 
 
     private TaskDAO(Context context) {
         dbHelper = new DBHelper(context);
+        idCounter = -1;
     }
 
     public static TaskDAO getInstance(Context context) {
@@ -58,13 +60,8 @@ public class TaskDAO {
     }
 
     public int generateID(){
-        cursor = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM "+ TASKS+ " ORDER BY " + TASK_ID + " DESC LIMIT 1", null);
-        if (cursor.getCount() > 0){
-            cursor.moveToFirst();
-            int maxid = cursor.getInt(cursor.getColumnIndex(TASK_ID));
-            return maxid;
-        }
-        return 0;
+            idCounter++;
+            return idCounter;
     }
 
     public Task getTaskById(final int id) {
