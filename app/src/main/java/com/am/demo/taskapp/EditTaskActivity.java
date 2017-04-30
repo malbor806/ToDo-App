@@ -69,6 +69,9 @@ public class EditTaskActivity extends AppCompatActivity {
         if (task == null) {
             task = createNewTask();
             taskDAO.insertNewTask(task);
+            int id = taskDAO.generateCounter();
+            saveMiniTaskCheckList();
+            taskDAO.insertMiniTaskList(miniTasks, id);
         } else {
             task.setTitle(String.valueOf(titleEditText.getText()));
             task.setDescription(String.valueOf(descriptionEditText.getText()));
@@ -95,7 +98,6 @@ public class EditTaskActivity extends AppCompatActivity {
             }
         }
     }
-
 
     private void createTodoLinearList() {
         View inflatedView = getLayoutInflater().inflate(R.layout.minitask_layout, null);
@@ -171,8 +173,6 @@ public class EditTaskActivity extends AppCompatActivity {
         task.setId(id);
         task.setTitle(String.valueOf(titleEditText.getText()));
         task.setDescription(String.valueOf(descriptionEditText.getText()));
-        saveMiniTaskCheckList();
-        taskDAO.insertMiniTaskList(miniTasks,id);
         return task;
     }
 

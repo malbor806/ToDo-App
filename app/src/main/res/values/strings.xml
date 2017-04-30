@@ -11,4 +11,6 @@
     <string name="add_new_task">Add new task</string>
     <string name="description_example">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ex enim, mollis quis erat id, vehicula volutpat ipsum. Nullam leo sapien, iaculis non odio sed, iaculis elementum nibh. Sed ut risus eu mi vulputate convallis. Nullam eu egestas sem. In velit erat, tempor ac orci ut, hendrerit accumsan nibh. Donec tincidunt egestas rutrum.</string>
     <string name="add">ADD</string>
+    <string name="tv_task_view_description_example">This is too long text so it should be cut in some place and show three dots</string>
+    <string name="plus">+</string>
 </resources>

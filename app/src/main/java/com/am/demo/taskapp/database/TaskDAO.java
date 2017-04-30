@@ -33,7 +33,7 @@ public class TaskDAO {
 
     private TaskDAO(Context context) {
         dbHelper = new DBHelper(context);
-        idCounter = -1;
+        idCounter = 0;
     }
 
     public static TaskDAO getInstance(Context context) {
@@ -60,8 +60,14 @@ public class TaskDAO {
     }
 
     public int generateID(){
-            idCounter++;
             return idCounter;
+    }
+
+    public int generateCounter() {
+        cursor = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM " + TASKS + " ORDER BY " + TASK_ID + " DESC LIMIT 1", null);
+        cursor.moveToFirst();
+        int maxid = cursor.getInt(cursor.getColumnIndex(TASK_ID));
+        return maxid;
     }
 
     public Task getTaskById(final int id) {

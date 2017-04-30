@@ -4,14 +4,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:layout_margin="5dp"
-    android:background="@drawable/task_item_selector">
+    android:padding="@dimen/ll_main_padding"
+    android:layout_margin="@dimen/ll_margin"
+    >
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="26sp"
+        android:textSize="@dimen/title_size"
         tools:text="Task title"
         android:paddingBottom="@dimen/tv_title_padding_bottom"
         android:maxLines="2"
@@ -24,6 +24,6 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:ellipsize="end"
-        tools:text="This is too long text so it should be cut in some place and show three dots"/>
+        tools:text="@string/tv_task_view_description_example"/>
 
 </LinearLayout>

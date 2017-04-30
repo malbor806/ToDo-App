@@ -3,15 +3,13 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/ll_todoItem"
-    android:padding="10dp"
-    >
+    android:padding="@dimen/ll_main_padding">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+"
-        android:textSize="22sp"
-        />
+        android:text="@string/plus"
+        android:textSize="@dimen/tv_plus_size" />
 
     <EditText
         android:layout_width="match_parent"
@@ -19,7 +17,6 @@
         android:id="@+id/et_taskListName"
         android:maxLines="2"
         android:maxLength="120"
-        android:hint="@string/add_new_task"
-        />
+        android:hint="@string/add_new_task" />
 
 </LinearLayout>

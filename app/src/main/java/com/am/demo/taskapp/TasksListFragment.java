@@ -26,10 +26,9 @@ public class TasksListFragment extends Fragment {
     private static final String TASK_ID = "TASK_ID";
     private RecyclerView tasksRecyclerView;
     private FloatingActionButton addNewTaskFloatingActionButton;
+    private TasksRecyclerViewAdapter adapter;
     private TaskDAO taskDAO;
-    private InformationFragment informationFragment;
-    private FragmentTransaction fragmentTransaction;
-    TasksRecyclerViewAdapter adapter;
+    private ArrayList<Task> tasks;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,7 +81,7 @@ public class TasksListFragment extends Fragment {
 
     private void showTaskDetails(Task task) {
         popFromBackStack();
-        informationFragment = new InformationFragment();
+        InformationFragment informationFragment = new InformationFragment();
         addArgumentsForInformationFragment(task, informationFragment);
         startInformationFragmentTransaction(informationFragment);
     }
@@ -100,7 +99,7 @@ public class TasksListFragment extends Fragment {
     }
 
     private void startInformationFragmentTransaction(InformationFragment informationFragment) {
-        fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container_fragmentInformation,
                 informationFragment, MainActivity.TAG);
         fragmentTransaction.addToBackStack(null);
@@ -110,7 +109,8 @@ public class TasksListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        adapter.setTasks(taskDAO.getAllTasks());
+        tasks = (ArrayList<Task>) taskDAO.getAllTasks();
+        adapter.setTasks(tasks);
         adapter.notifyDataSetChanged();
     }
 

@@ -6,4 +6,8 @@
     <dimen name="title_margin_bottom">10dp</dimen>
     <dimen name="line_spacing_extra">2dp</dimen>
     <dimen name="tv_title_padding_bottom">10dp</dimen>
+    <dimen name="mini_task_padding">20dp</dimen>
+    <dimen name="ll_margin">5dp</dimen>
+    <dimen name="tv_plus_size">22sp</dimen>
+    <dimen name="fi_checkbox_padding">20dp</dimen>
 </resources>
