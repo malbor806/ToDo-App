@@ -7,10 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.am.demo.taskapp.adapter.SimpleItemTouchHelperCallback;
 import com.am.demo.taskapp.adapter.TasksRecyclerViewAdapter;
 import com.am.demo.taskapp.database.TaskDAO;
 import com.am.demo.taskapp.model.Task;
@@ -57,10 +59,15 @@ public class TasksListFragment extends Fragment {
 
     private void setRecyclerView() {
         tasksRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        TasksRecyclerViewAdapter adapter = new TasksRecyclerViewAdapter();
+        TasksRecyclerViewAdapter adapter = new TasksRecyclerViewAdapter(getContext());
         tasksRecyclerView.setAdapter(adapter);
+
         adapter.setOnTaskClickListener(this::showTaskDetails);
         adapter.setTasks(taskDAO.getAllTasks());
+        ItemTouchHelper.Callback callback =
+                new SimpleItemTouchHelperCallback(adapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(tasksRecyclerView);
     }
 
     private void showTaskDetails(Task task) {

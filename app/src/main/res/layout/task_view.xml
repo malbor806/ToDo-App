@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    android:background="@drawable/task_item_selector">
 
     <TextView
         android:layout_width="match_parent"

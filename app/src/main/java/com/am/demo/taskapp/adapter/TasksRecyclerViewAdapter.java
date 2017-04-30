@@ -1,5 +1,6 @@
 package com.am.demo.taskapp.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,20 +8,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.am.demo.taskapp.R;
+import com.am.demo.taskapp.database.TaskDAO;
 import com.am.demo.taskapp.model.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by malbor806 on 23.04.2017.
  */
 
-public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecyclerViewAdapter.ViewHolder> {
+public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecyclerViewAdapter.ViewHolder>
+        implements ItemTouchHelperAdapter {
     private List<Task> tasks;
     private OnTaskClickListener onTaskClickListener;
+    private Context context;
 
-    public TasksRecyclerViewAdapter() {
+    public TasksRecyclerViewAdapter(Context context) {
+        this.context = context;
         tasks = new ArrayList<>();
     }
 
@@ -42,12 +48,25 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         return tasks.size() > 0 ? tasks.size() : 0;
     }
 
+
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
 
     public void setOnTaskClickListener(OnTaskClickListener onTaskClickListener) {
         this.onTaskClickListener = onTaskClickListener;
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        TaskDAO taskDAO = TaskDAO.getInstance(context);
+        taskDAO.deleteTaskById(tasks.get(position).getId());
+        tasks.remove(position);
+        notifyItemRemoved(position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -66,6 +85,12 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
                         }
                     }
             );
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return false;
+                }
+            });
         }
 
         void bind(Task task) {
