@@ -27,7 +27,6 @@ public class EditTaskActivity extends AppCompatActivity {
     private Button saveChangesButton;
     private LinearLayout checkboxListLinearLayout;
     private LinearLayout todoLinearList;
-    private Button addNewMiniTaskButton;
     private List<MiniTask> miniTaskList;
     private ArrayList<String> miniTasks;
     private Task task;
@@ -55,8 +54,6 @@ public class EditTaskActivity extends AppCompatActivity {
         descriptionEditText = (EditText) findViewById(R.id.et_setDescription);
         saveChangesButton = (Button) findViewById(R.id.b_saveChanges);
         checkboxListLinearLayout = (LinearLayout) findViewById(R.id.ll_minitaskList);
-        addNewMiniTaskButton = (Button) findViewById(R.id.b_addNewMiniTask);
-
     }
 
     private void setListener() {
@@ -67,7 +64,6 @@ public class EditTaskActivity extends AppCompatActivity {
                 addNewTaskToDatabase();
             }
         });
-        addNewMiniTaskButton.setOnClickListener(v -> createCheckBoxList());
     }
 
     private void addNewTaskToDatabase() {
@@ -113,7 +109,7 @@ public class EditTaskActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().contains("\n")) {
+                if (s.toString().contains("\n") || s.toString().length() == 120) {
                     et.setText(et.getText().subSequence(0, et.length() - 1));
                     createCheckBoxList();
                     LinearLayout ll = (LinearLayout) checkboxListLinearLayout.getChildAt(checkboxListLinearLayout.getChildCount() - 1);
