@@ -57,9 +57,11 @@ public class TaskDAO {
         }
     }
 
-    public int getDatabaseSize(){
-        cursor = dbHelper.getReadableDatabase().rawQuery("select * from " + TASKS + ";", null);
-        return cursor.getCount();
+    public int generateID(){
+        cursor = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM "+ TASKS+ " ORDER BY " + TASK_ID + " DESC LIMIT 1", null);
+        cursor.moveToFirst();
+        int maxid = cursor.getInt(cursor.getColumnIndex(TASK_ID));
+        return maxid;
     }
 
     public Task getTaskById(final int id) {
