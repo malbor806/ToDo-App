@@ -1,6 +1,5 @@
 package com.am.demo.taskapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -19,13 +18,15 @@ import com.am.demo.taskapp.model.Task;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TasksListFragment extends Fragment {
     private static final String TASK_ID = "TASK_ID";
-    private RecyclerView tasksRecyclerView;
-    private FloatingActionButton addNewTaskFloatingActionButton;
+    @BindView(R.id.rv_taskList)
+    RecyclerView tasksRecyclerView;
+    @BindView(R.id.fab_addNewTask)
+    FloatingActionButton addNewTaskFloatingActionButton;
     private TasksRecyclerViewAdapter adapter;
     private TaskDAO taskDAO;
     private ArrayList<Task> tasks;
@@ -34,30 +35,21 @@ public class TasksListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setRetainInstance(true);
-        return inflater.inflate(R.layout.fragment_tasks_list, container, false);
+        View fragmentView = inflater.inflate(R.layout.fragment_tasks_list, container, false);
+        ButterKnife.bind(this, fragmentView);
+        return fragmentView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         taskDAO = TaskDAO.getInstance(getContext());
-        findViews();
         setListeners();
         setRecyclerView();
     }
 
-    private void findViews() {
-        tasksRecyclerView = (RecyclerView) getView().findViewById(R.id.rv_taskList);
-        addNewTaskFloatingActionButton = (FloatingActionButton) getView().findViewById(R.id.fab_addNewTask);
-    }
-
     private void setListeners() {
-        addNewTaskFloatingActionButton.setOnClickListener(v -> startEditTaskActivity());
-    }
-
-    private void startEditTaskActivity() {
-        Intent intent = new Intent(getActivity(), EditTaskActivity.class);
-        getActivity().startActivity(intent);
+        addNewTaskFloatingActionButton.setOnClickListener(v -> MainActivity.start(getContext(), null));
     }
 
     private void setRecyclerView() {
@@ -72,11 +64,13 @@ public class TasksListFragment extends Fragment {
         touchHelper.attachToRecyclerView(tasksRecyclerView);
     }
 
-    private void removeFragmentIfExist() {
-        View v = getActivity().findViewById(R.id.ll_fragmentInformation);
-        if (v != null) {
+    private void removeFragmentIfExist(int position) {
+        View fragmentInformationView = getActivity().findViewById(R.id.ll_fragmentInformation);
+        if (fragmentInformationView != null) {
             popFromBackStack();
         }
+        TaskDAO taskDAO = TaskDAO.getInstance(getContext());
+        taskDAO.deleteTaskById(tasks.get(position).getId());
     }
 
     private void showTaskDetails(Task task) {

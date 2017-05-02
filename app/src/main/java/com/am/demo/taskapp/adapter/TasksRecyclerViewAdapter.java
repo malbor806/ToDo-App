@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.am.demo.taskapp.R;
-import com.am.demo.taskapp.database.TaskDAO;
 import com.am.demo.taskapp.model.Task;
 
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
     @Override
     public int getItemCount() {
-        return tasks.size() > 0 ? tasks.size() : 0;
+        return tasks.size();
     }
 
 
@@ -63,9 +62,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
     @Override
     public void onItemDismiss(int position) {
-        TaskDAO taskDAO = TaskDAO.getInstance(context);
-        taskDAO.deleteTaskById(tasks.get(position).getId());
-        onTaskRemoveListener.onTaskRemove();
+        onTaskRemoveListener.onTaskRemove(position);
         tasks.remove(position);
         notifyItemRemoved(position);
     }

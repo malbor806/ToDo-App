@@ -23,6 +23,7 @@
         android:orientation="horizontal"
         android:layout_margin="10dp">
 
+
         <FrameLayout
             android:id="@+id/container_fragmentTasksList"
             android:layout_width="0dp"

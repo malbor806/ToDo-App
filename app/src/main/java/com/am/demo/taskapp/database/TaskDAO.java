@@ -17,19 +17,18 @@ import java.util.List;
 
 public class TaskDAO {
     private static final String TASKS = "tasks";
-    private static final String TASK_ID = "_id";
+    private static final String TASK_ID = "id";
     private static final String TASK_TITLE = "task_title";
     private static final String TASK_DESCRIPTION = "task_description";
     private static final String CHECKLIST = "checklist";
-    private static final String CHECK_ID = "_idCheck";
+    private static final String CHECK_ID = "idCheck";
     private static final String CHECK_ISCHECKED = "is_checked";
     private static final String CHECK_NAME = "check_task";
     private static TaskDAO instance;
     private static int idCounter;
-    private DBHelper dbHelper;
-    private ContentValues contentValues;
-    private Cursor cursor;
-
+    private final DBHelper dbHelper;
+    private static ContentValues contentValues;
+    private static Cursor cursor;
 
     private TaskDAO(Context context) {
         dbHelper = new DBHelper(context);
@@ -60,7 +59,7 @@ public class TaskDAO {
     }
 
     public int generateID(){
-            return idCounter;
+        return idCounter + 1;
     }
 
     public int generateCounter() {
@@ -71,7 +70,7 @@ public class TaskDAO {
     }
 
     public Task getTaskById(final int id) {
-        cursor = dbHelper.getReadableDatabase().rawQuery("select * from " + TASKS + " where " + TASK_ID + " = " + id, null);
+        cursor = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM " + TASKS + " WHERE " + TASK_ID + " = " + id, null);
         if (cursor.getCount() == 1) {
             cursor.moveToFirst();
             return mapCursorToTask(cursor);
@@ -121,11 +120,8 @@ public class TaskDAO {
         );
     }
 
-    public List getAllTasks() {
-        cursor = dbHelper.getReadableDatabase().query(TASKS,
-                new String[]{TASK_ID, TASK_TITLE, TASK_DESCRIPTION},
-                null, null, null, null, null
-        );
+    public List<Task> getAllTasks() {
+        cursor = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM " + TASKS + ";", null);
         List<Task> results = new ArrayList<>();
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -135,9 +131,9 @@ public class TaskDAO {
         return results;
     }
 
-    public List getAllMiniTasks(int id){
+    public List<MiniTask> getAllMiniTasks(int id) {
         Cursor cursor = dbHelper.getReadableDatabase()
-                .rawQuery("select * from " + CHECKLIST + " where " + TASK_ID + " = " + id, null);
+                .rawQuery("SELECT * FROM " + CHECKLIST + " WHERE " + TASK_ID + " = " + id, null);
         List<MiniTask> results = new ArrayList<>();
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -168,9 +164,10 @@ public class TaskDAO {
         updateMiniTaskList(miniTasks, id);
     }
 
-    public void updateMiniTaskList(ArrayList<MiniTask> miniTasks, int taskId) {
-        for(MiniTask mt : miniTasks)
-            insertUpdatedTaskList(mt, taskId );
+    private void updateMiniTaskList(ArrayList<MiniTask> miniTasks, int taskId) {
+        for (MiniTask mt : miniTasks) {
+            insertUpdatedTaskList(mt, taskId);
+        }
     }
 
     public void updateMiniTask(final MiniTask miniTask) {

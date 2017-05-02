@@ -1,11 +1,9 @@
 package com.am.demo.taskapp;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +19,24 @@ import com.am.demo.taskapp.model.Task;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class InformationFragment extends Fragment {
     private static final String TASK_ID = "TASK_ID";
-    private TextView titleTextView;
-    private TextView descriptionTextView;
-    private Button editTaskButton;
-    private LinearLayout checkboxListLinearLayout;
-    private Task task;
+    private static Task task;
+    @BindView(R.id.tv_taskTitle)
+    TextView titleTextView;
+    @BindView(R.id.tv_taskDescription)
+    TextView descriptionTextView;
+    @BindView(R.id.b_editButton)
+    Button editTaskButton;
+    @BindView(R.id.ll_checkboxList)
+    LinearLayout checkboxListLinearLayout;
     private TaskDAO taskDAO;
     private List<MiniTask> miniTaskList;
 
@@ -39,34 +44,21 @@ public class InformationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setRetainInstance(true);
-        View v = inflater.inflate(R.layout.fragment_information, container, false);
-        v.setClickable(true);
-        return v;
+        View fragmentView = inflater.inflate(R.layout.fragment_information, container, false);
+        fragmentView.setClickable(true);
+        ButterKnife.bind(this, fragmentView);
+        return fragmentView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        findViews();
         taskDAO = TaskDAO.getInstance(getContext());
         setListener();
     }
 
-    private void findViews() {
-        titleTextView = (TextView) getView().findViewById(R.id.tv_taskTitle);
-        descriptionTextView = (TextView) getView().findViewById(R.id.tv_taskDescription);
-        editTaskButton = (Button) getView().findViewById(R.id.b_editButton);
-        checkboxListLinearLayout = (LinearLayout) getView().findViewById(R.id.ll_checkboxList);
-    }
-
     private void setListener() {
-        editTaskButton.setOnClickListener(v -> startEditTaskActivity());
-    }
-
-    private void startEditTaskActivity() {
-        Intent intent = new Intent(getActivity(), EditTaskActivity.class);
-        intent.putExtra(TASK_ID, task.getId());
-        getActivity().startActivity(intent);
+        editTaskButton.setOnClickListener(v -> MainActivity.start(getContext(), task));
     }
 
     @Override
@@ -109,9 +101,7 @@ public class InformationFragment extends Fragment {
         CheckBox checkBox = new CheckBox(getContext());
         checkBox.setChecked(mt.isChecked());
         checkBox.setText(mt.getName());
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            mt.setChecked(isChecked);
-        });
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mt.setChecked(isChecked));
         return checkBox;
     }
 
@@ -124,7 +114,8 @@ public class InformationFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        for (MiniTask mt : miniTaskList)
+        for (MiniTask mt : miniTaskList) {
             taskDAO.updateMiniTask(mt);
+        }
     }
 }

@@ -5,5 +5,5 @@ package com.am.demo.taskapp.adapter;
  */
 
 public interface OnTaskRemoveListener {
-    void onTaskRemove();
+    void onTaskRemove(int position);
 }
